@@ -19,6 +19,12 @@ namespace PetraBarus\Yii2\ArchivableMailer\Providers;
 abstract class Provider extends \yii\base\Component {
 
     /**
+     * The archive URL tag.
+     * @var string
+     */
+    public $archiveUrlTag;
+
+    /**
      * @param string $html the content to be uploaded.
      * @return string the URL of the uploaded content.
      */

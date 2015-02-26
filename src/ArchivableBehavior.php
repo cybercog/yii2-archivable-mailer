@@ -34,6 +34,7 @@ class ArchivableBehavior extends \yii\base\Behavior {
     public function init() {
         parent::init();
         $this->provider = \Yii::createObject($this->provider);
+        $this->provider->archiveUrlTag = $this->archiveUrlTag;
     }
 
     /**
@@ -55,7 +56,10 @@ class ArchivableBehavior extends \yii\base\Behavior {
         $headers = self::getHeaders($message);
         if ($html !== null) {
             $url = $this->provider->uploadHtml($headers, $html);
-            $message->setHtmlBody(str_replace($this->linkText, $url, $html));
+            if ($url) {
+                $message->setHtmlBody(str_replace($this->archiveUrlTag, $url,
+                                $html));
+            }
         }
     }
 

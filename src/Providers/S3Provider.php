@@ -39,6 +39,12 @@ class S3Provider extends Provider {
     public $config;
 
     /**
+     * Override upload options.
+     * @var array
+     */
+    public $uploadOptions = [];
+
+    /**
      * @var S3Client
      */
     private $_client;
@@ -57,19 +63,25 @@ class S3Provider extends Provider {
      */
     public function uploadHtml($headers, $html) {
         $file = date('YmdHis-') . uniqid("", true);
-        $result = $this->_client->putObject([
+        $key = (!empty($this->directoryPath) ? $this->directoryPath . '/' : '') . $file . '.html';
+        $url = $this->_client->getObjectUrl($this->bucket, $key);
+        $result = $this->_client->putObject(array_merge([
             'ACL' => 'public-read',
             'Bucket' => $this->bucket,
-            'Body' => $html,
+            'Body' => str_replace($this->archiveUrlTag, $url, $html),
             'CacheControl' => 'max-age=31536000, public',
             'ContentType' => 'text/html',
-            'Key' => (!empty($this->directoryPath) ? $this->directoryPath . '/' : '') . $file . '.html',
+            'Key' => $key,
             'Metadata' => [
                 'X-UID-MailHeader' => \yii\helpers\Json::encode($headers),
             ],
             'Expires' => gmdate('D, d M Y H:i:s \G\M\T', strtotime('+5 year')),
-        ]);
-        return $result['ObjectURL'];
+                        ], $this->uploadOptions));
+        if ($result) {
+            return $url;
+        } else {
+            return false;
+        }
     }
 
 }
