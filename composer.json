@@ -16,7 +16,7 @@
     },
     "autoload": {
         "psr-4": {
-            "PetraBarus\\Yii2\\ArchivableMailer": "src/"
+            "PetraBarus\\Yii2\\ArchivableMailer\\": "src/"
         }
     }
 }
