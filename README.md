@@ -51,6 +51,16 @@ mailer configuration.
     ],
 ```
 
+To put the URL of the archive in the HTML, just put `{{archiveurl}}` in the HTML.
+
+e.g.
+
+```html
+   <a href="{{archiveurl}}">View in Browser</a>
+```
+
+The text can be changed using `archiveUrlTag` attribute of the behavior.
+
 ## Road Map
 
 - Add more providers.
